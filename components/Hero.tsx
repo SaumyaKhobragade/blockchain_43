@@ -10,10 +10,10 @@ const Hero: React.FC = () => {
       <div className={`${styles['hero-body']} margin-center`}>
         <div className={styles['hero-desc']}>
           <div className={styles['hero-intro']}>
-            <p>Welcome <span className={styles['hero_intro_wave']}>�</span></p>
+            <p>Welcome to <span className={styles['hero_intro_wave']}>📚</span></p>
             <h1>
               <span className={`${styles['hero_intro_name']} gradient-txt`}>
-                Report Card Generator
+                IntelliX
               </span>
             </h1>
             <p>

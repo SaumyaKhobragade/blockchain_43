@@ -1,9 +1,10 @@
 .container {
+  /* Add top padding to account for the fixed global header (h-20 => 5rem) */
   min-height: 100vh;
   background: radial-gradient(circle at 99% 6%, rgba(115, 47, 218, 0.6), rgba(115, 47, 218, 0) 40%),
     radial-gradient(circle at 27% 0%, rgba(73, 70, 229, 0.4), rgba(73, 70, 229, 0) 35%),
     radial-gradient(circle at 8% 18%, rgba(229, 70, 221, 0.35), rgba(229, 70, 221, 0) 30%), #0b0326;
-  padding: 2rem 1rem;
+  padding: 8rem 1rem 2rem; /* top padding ensures header doesn't overlap page controls */
 }
 
 .header {

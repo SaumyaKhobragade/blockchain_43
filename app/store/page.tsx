@@ -73,19 +73,25 @@ export default function Faucet() {
           if (!Number.isNaN(pct)) setUploadProgress(pct)
         } catch {}
       }
-      const output = await lighthouse.upload(
-        files,
-        apiKey,
-        undefined,
-        progressCallback
-      )
+            // use cidVersion=1 (numeric) per SDK signature
+            const output = await lighthouse.upload(
+                files,
+                apiKey,
+                1,
+                progressCallback
+            )
       const cid = output?.data?.Hash as string | undefined
       if (!cid) throw new Error("Upload failed: no CID returned")
      
       setUploadedFile(output)
       setUploadProgress(100)
-    } catch (e) {
-      setUploadError(e instanceof Error ? e.message : "Upload failed")
+        } catch (e) {
+            console.error("Lighthouse upload error:", e)
+            const msg = e instanceof Error ? e.message : String(e)
+            const friendly = /unauthorized|forbidden|401|403/i.test(msg)
+                ? "Authentication failed when uploading to Lighthouse. Check NEXT_PUBLIC_LIGHTHOUSE_API_KEY in .env.local and ensure it is valid."
+                : msg || "Upload failed"
+            setUploadError(friendly)
     } finally {
       setUploading(false)
     }

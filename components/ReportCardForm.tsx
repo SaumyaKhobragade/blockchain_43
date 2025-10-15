@@ -20,6 +20,7 @@ export const ReportCardForm: React.FC<ReportCardFormProps> = ({
   const [term, setTerm] = useState("")
   const [teacherName, setTeacherName] = useState("")
   const [remarks, setRemarks] = useState("")
+  const [photoFile, setPhotoFile] = useState<File | null>(null)
   
   const [subjects, setSubjects] = useState<Subject[]>([
     { name: "Mathematics", marks: 0, maxMarks: 100, grade: "F" },
@@ -76,7 +77,12 @@ export const ReportCardForm: React.FC<ReportCardFormProps> = ({
       remarks,
       teacherName,
       dateIssued: new Date().toISOString(),
+      photoName: photoFile ? photoFile.name : undefined,
     }
+    // Pass the selected photo file via a non-serializable side-channel: we'll call onSubmit with the form data
+    // The parent page will keep the File object in its own state if needed. We'll return the file as a second arg via a custom property on the function (simpler than changing the signature everywhere).
+    // Because TypeScript disallows changing the onSubmit signature, we'll attach the file to (onSubmit as any).lastPhoto temporarily.
+    ;(onSubmit as any).lastPhoto = photoFile
 
     onSubmit(reportCard)
   }
@@ -248,6 +254,16 @@ export const ReportCardForm: React.FC<ReportCardFormProps> = ({
       <div className={styles.section}>
         <h2 className={styles.sectionTitle}>Additional Information</h2>
         <div className={styles.formGrid}>
+          <div className={styles.formGroup}>
+            <label htmlFor="photo">Student Photo (optional)</label>
+            <input
+              id="photo"
+              type="file"
+              accept="image/*"
+              onChange={(e) => setPhotoFile(e.target.files ? e.target.files[0] : null)}
+            />
+            <small className={styles.hint}>Optional: Upload a photo (jpg, png). Max 5MB recommended.</small>
+          </div>
           <div className={styles.formGroup}>
             <label htmlFor="teacherName">Teacher Name *</label>
             <input

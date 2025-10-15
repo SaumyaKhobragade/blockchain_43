@@ -25,7 +25,8 @@ export default function CreateReportCard() {
   const [fileCoinCid, setFileCoinCid] = useState<string | null>(null)
 
   const handleFormSubmit = async (data: ReportCard) => {
-    setReportCard(data)
+  // The ReportCardForm attaches the selected File to the onSubmit handler as (onSubmit as any).lastPhoto
+  setReportCard(data)
     setStorageStatus("idle")
     setFileCoinCid(null)
   }
@@ -48,13 +49,25 @@ export default function CreateReportCard() {
       setErrorMessage(null)
       setUploadProgress(0)
 
-      // Convert report card to JSON blob
-      const jsonBlob = new Blob([JSON.stringify(reportCard, null, 2)], {
+      // Prepare upload list: include JSON and optional photo (if present).
+  // We expect the ReportCardForm to have attached the last selected photo file to the onSubmit handler (handleFormSubmit) as lastPhoto
+  const photoFile: File | undefined = (handleFormSubmit as any).lastPhoto || undefined
+
+      // Create JSON blob that includes a reference to the photo filename if provided
+      const jsonPayload: any = { ...reportCard }
+      if (photoFile) {
+        jsonPayload.photoName = photoFile.name
+      }
+
+      const jsonBlob = new Blob([JSON.stringify(jsonPayload, null, 2)], {
         type: "application/json",
       })
-      const file = new File([jsonBlob], `report-card-${reportCard.id}.json`, {
+      const jsonFile = new File([jsonBlob], `report-card-${reportCard.id}.json`, {
         type: "application/json",
       })
+
+      const filesToUpload: File[] = [jsonFile]
+      if (photoFile) filesToUpload.push(photoFile)
 
       // Upload to Lighthouse/IPFS
       const progressCallback = (progressData: any) => {
@@ -64,7 +77,8 @@ export default function CreateReportCard() {
         } catch {}
       }
 
-      const output = await lighthouse.upload([file], apiKey, false, progressCallback)
+      // Upload both files as a directory so both are pinned and we can reference them by filename
+      const output = await lighthouse.upload(filesToUpload, apiKey, 1, progressCallback)
       const cid = output?.data?.Hash
 
       if (!cid) throw new Error("Upload failed: no CID returned")
@@ -83,18 +97,30 @@ export default function CreateReportCard() {
       await tx.wait()
 
       setFileCoinCid(cid)
-      setReportCard({ ...reportCard, cid })
+  // If a photo was uploaded as part of the directory, determine photoCid (it will be the same root CID when uploading a directory; the file path will be `/${photoFile.name}` under that CID). We'll store photoName and photoCid for convenient display.
+  const photoName = (ReportCardForm as any).lastPhoto ? (ReportCardForm as any).lastPhoto.name : undefined
+  const photoCid = photoName ? cid : undefined
+
+  setReportCard({ ...reportCard, cid, photoName, photoCid })
       setStorageStatus("success")
 
       // Save to localStorage as well
       const stored = localStorage.getItem("reportCards")
       const reportCards = stored ? JSON.parse(stored) : []
-      reportCards.push({ ...reportCard, cid })
+  reportCards.push({ ...reportCard, cid, photoName, photoCid })
       localStorage.setItem("reportCards", JSON.stringify(reportCards))
 
     } catch (e) {
+      // Provide better diagnostics for auth failures from Lighthouse
+      console.error("Lighthouse upload/store error:", e)
       const err = e as unknown as { reason?: string; shortMessage?: string; message?: string }
-      const reason = err?.reason || err?.shortMessage || err?.message || "Storage failed"
+      let reason = err?.reason || err?.shortMessage || err?.message || "Storage failed"
+
+      // Common API key/auth errors may return strings like 'Unauthorized' or 'Forbidden'
+      if (typeof reason === 'string' && /unauthorized|forbidden|401|403/i.test(reason)) {
+        reason = "Authentication failed when uploading to Lighthouse. Check NEXT_PUBLIC_LIGHTHOUSE_API_KEY in .env.local and ensure it is valid."
+      }
+
       setErrorMessage(reason)
       setStorageStatus("error")
     } finally {

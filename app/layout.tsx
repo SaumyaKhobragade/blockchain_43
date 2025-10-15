@@ -24,8 +24,8 @@ const funnelSans = Funnel_Sans({
 
 // Website Config
 export const metadata: Metadata = {
-  title: "Report Card Generator | FileCoin Storage",
-  description: "Create, store, and manage academic report cards on the decentralized FileCoin network",
+  title: "IntelliX | Report Card Generator on FileCoin",
+  description: "Create, store, and manage academic report cards on the decentralized FileCoin network with IntelliX",
 };
 
 export default function RootLayout({

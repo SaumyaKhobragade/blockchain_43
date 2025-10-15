@@ -11,7 +11,7 @@ export default function Footer() {
               src="/assets/logos/logo.svg"
               width={150}
               height={150}
-              alt="dcipher Network Logo"
+              alt="IntelliX Logo"
             />
           </div>
           <div className="flex space-x-6">
@@ -40,7 +40,7 @@ export default function Footer() {
         </div>
         <div className="mt-6 md:mt-8 pt-6 md:pt-8 border-t border-gray-800 text-center">
           <p className="font-funnel-display text-gray-400">
-            Built with ❤️ by Germina Labs
+            Built with ❤️ by IntelliX Team
           </p>
         </div>
       </div>

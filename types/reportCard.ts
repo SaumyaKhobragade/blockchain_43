@@ -24,6 +24,9 @@ export interface ReportCard {
   teacherName: string;
   dateIssued: string;
   cid?: string; // FileCoin CID
+  // Optional student photo information
+  photoName?: string; // original filename (used to build gateway path)
+  photoCid?: string; // CID where photo is stored (if uploaded)
 }
 
 export const calculateGrade = (percentage: number): string => {

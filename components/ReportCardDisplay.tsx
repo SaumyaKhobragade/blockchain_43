@@ -14,6 +14,16 @@ export const ReportCardDisplay: React.FC<ReportCardDisplayProps> = ({
 }) => {
   return (
     <div className={styles.reportCard} id="report-card-print">
+      {/* Optional Student Photo */}
+      {(reportCard.photoCid || (reportCard.photoName && reportCard.cid)) && (
+        <div className={styles.photoContainer}>
+          <img
+            src={reportCard.photoCid ? `https://gateway.lighthouse.storage/ipfs/${reportCard.photoCid}/${reportCard.photoName}` : `https://gateway.lighthouse.storage/ipfs/${reportCard.cid}/${reportCard.photoName}`}
+            alt={`${reportCard.studentName} photo`}
+            className={styles.studentPhoto}
+          />
+        </div>
+      )}
       {/* Header */}
       <div className={styles.header}>
         <div className={styles.headerContent}>
@@ -21,8 +31,8 @@ export const ReportCardDisplay: React.FC<ReportCardDisplayProps> = ({
             <div className={styles.logoCircle}>🎓</div>
           </div>
           <div className={styles.schoolInfo}>
-            <h1 className={styles.schoolName}>Academic Report Card</h1>
-            <p className={styles.schoolTagline}>Excellence in Education</p>
+            <h1 className={styles.schoolName}>IntelliX Report Card</h1>
+            <p className={styles.schoolTagline}>Excellence in Education Through Innovation</p>
           </div>
         </div>
         <div className={styles.badge}>
