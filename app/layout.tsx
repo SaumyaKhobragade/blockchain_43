@@ -1,24 +1,13 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
-import { Funnel_Display, Funnel_Sans } from "next/font/google";
+import { Funnel_Sans } from "next/font/google";
 import "./globals.css";
 import { ContextProvider } from ".";
 import ReactQueryProvider from "./ReactQueryProvider";
 import Header from "@/components/header";
 
-const geist = Geist({ subsets: ["latin"], variable: "--font-geist-sans" });
-const geistMono = Geist_Mono({
+const primaryFont = Funnel_Sans({
   subsets: ["latin"],
-  variable: "--font-geist-mono",
-});
-const funnelDisplay = Funnel_Display({
-  subsets: ["latin"],
-  variable: "--font-funnel-display",
-  weight: ["300", "400", "500", "600", "700", "800"],
-});
-const funnelSans = Funnel_Sans({
-  subsets: ["latin"],
-  variable: "--font-funnel-sans",
+  variable: "--font-primary",
   weight: ["300", "400", "500", "600", "700", "800"],
 });
 
@@ -43,14 +32,8 @@ export default function RootLayout({
           crossOrigin="anonymous"
           referrerPolicy="no-referrer"
         />
-        <link
-          href="https://fonts.googleapis.com/css2?family=Lobster&display=swap"
-          rel="stylesheet"
-        />
       </head>
-      <body
-        className={`${geist.variable} ${geistMono.variable} ${funnelDisplay.variable} ${funnelSans.variable} font-sans`}
-      >
+      <body className={`${primaryFont.variable} font-primary antialiased`}>
         <ReactQueryProvider>
           <ContextProvider>
             <Header />
