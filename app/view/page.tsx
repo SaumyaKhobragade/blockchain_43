@@ -200,9 +200,7 @@ export default function ViewReportCards() {
 
           {/* Report Cards Grid */}
           {/* Grade distribution pie chart */}
-          <div style={{ display: 'flex', justifyContent: 'center' }}>
-            <PieChart counts={gradeCounts} size={160} />
-          </div>
+          
           {filteredCards.length === 0 ? (
             <div className={styles.emptyState}>
               <div className={styles.emptyIcon}>📚</div>

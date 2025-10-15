@@ -1,11 +1,12 @@
 "use client"
-import React, { useEffect, useState, useCallback } from 'react'
+import React, { useEffect, useState, useCallback, useMemo } from 'react'
 import { ReportCard } from '@/types/reportCard'
 import { ClassAnalysis, calculateStats, gradeBuckets, distributionRanges } from '@/types/analysis'
 import AnalysisSummary from '@/components/AnalysisSummary'
+import TopStudentsPieChart from '@/components/TopStudentsPieChart'
 import styles from './analytics.module.css'
 import lighthouse from '@lighthouse-web3/sdk'
-import { useAccount, useChainId } from 'wagmi'
+import { useAccount } from 'wagmi'
 import { useEthersSigner } from '@/hooks/useEthers'
 import { ethers } from 'ethers'
 import { CONTRACT_ADDRESS, CONTRACT_ABI } from '@/lib/contract'
@@ -43,6 +44,11 @@ export default function AnalyticsPage() {
 
   const { isConnected } = useAccount()
   const signer = useEthersSigner()
+
+  const currentClassCards = useMemo(() => {
+    if (!selectedClass) return []
+    return reportCards.filter(r => r.class === selectedClass)
+  }, [reportCards, selectedClass])
 
   const seedSampleData = useCallback((className = "10th", count = 100) => {
     const samples: ReportCard[] = []
@@ -105,15 +111,23 @@ export default function AnalyticsPage() {
   }, [classes, selectedClass])
 
   useEffect(() => {
-    if (!selectedClass) return
-    const cards = reportCards.filter(r => r.class === selectedClass)
-    const percentages = cards.map(c => c.percentage)
+    if (!selectedClass) {
+      setAnalysis(null)
+      return
+    }
+
+    if (currentClassCards.length === 0) {
+      setAnalysis(null)
+      return
+    }
+
+    const percentages = currentClassCards.map(c => c.percentage)
     const stats = calculateStats(percentages)
     const grades = gradeBuckets(percentages)
     const dist = distributionRanges(percentages)
     const analysisObj: ClassAnalysis = {
       className: selectedClass,
-      studentCount: cards.length,
+      studentCount: currentClassCards.length,
       meanPercentage: stats.mean,
       medianPercentage: stats.median,
       stdDevPercentage: stats.stddev,
@@ -124,7 +138,7 @@ export default function AnalyticsPage() {
       createdAt: new Date().toISOString()
     }
     setAnalysis(analysisObj)
-  }, [selectedClass, reportCards])
+  }, [currentClassCards, selectedClass])
 
   const handleUploadAnalysis = async () => {
     if (!analysis) return
@@ -220,6 +234,7 @@ export default function AnalyticsPage() {
         {analysis ? (
           <>
             <AnalysisSummary analysis={analysis} />
+            <TopStudentsPieChart reportCards={currentClassCards} />
             <div style={{ marginTop: 12, display: 'flex', gap: 8 }}>
               <button onClick={() => exportSvgToPng('#grade-svg', `grade-breakdown-${analysis.className}.png`)} className={styles.uploadBtn}>Export Grade Chart</button>
               <button onClick={() => exportSvgToPng('#histogram-svg', `distribution-${analysis.className}.png`)} className={styles.uploadBtn}>Export Distribution</button>
