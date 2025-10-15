@@ -1,6 +1,5 @@
 "use client"
 
-import Image from "next/image"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { WalletConnect } from "./walletConnect"
@@ -8,27 +7,19 @@ import { WalletConnect } from "./walletConnect"
 const NAV_LINKS = [
   { href: "/create", label: "Create" },
   { href: "/view", label: "View" },
-  { href: "/store", label: "Store" },
 ]
 
 const Header = () => {
   const pathname = usePathname()
 
   return (
-    <header className="fixed top-0 z-30 w-full border-b border-white/10 bg-slate-950/60 backdrop-blur">
-      <div className="mx-auto flex h-20 w-full max-w-6xl items-center justify-between px-4 sm:px-6">
-        <Link href="/" className="flex items-center gap-3 text-white transition-transform hover:scale-[1.01]">
-          <Image
-            className="h-10 w-10 sm:h-11 sm:w-11"
-            src="/assets/logos/logo.svg"
-            width={48}
-            height={48}
-            alt="IntelliX logo"
-          />
-          <span className="hidden text-lg font-semibold tracking-tight sm:block">IntelliX</span>
+    <header className="fixed top-0 z-30 w-full border-b border-white/10 bg-slate-950/70 backdrop-blur">
+      <div className="mx-auto grid h-20 w-full max-w-6xl grid-cols-[auto,1fr,auto] items-center px-4 sm:px-6">
+        <Link href="/" className="flex items-center gap-2 text-white transition-transform hover:scale-[1.01]">
+          <span className="text-lg font-semibold tracking-tight sm:text-xl">IntelliX</span>
         </Link>
 
-        <nav className="hidden items-center gap-1 rounded-full border border-white/10 bg-white/5 px-2 py-1.5 text-sm text-slate-200 shadow-sm backdrop-blur md:flex">
+        <nav className="hidden items-center justify-center gap-1 rounded-full border border-white/10 bg-white/5 px-2 py-1.5 text-sm text-slate-200 shadow-sm backdrop-blur md:flex">
           {NAV_LINKS.map((link) => {
             const isActive = pathname.startsWith(link.href)
             return (
@@ -47,7 +38,7 @@ const Header = () => {
           })}
         </nav>
 
-        <div className="flex items-center gap-3">
+        <div className="ml-auto flex items-center gap-3">
           <nav className="md:hidden">
             <div className="flex items-center gap-1 text-xs text-slate-300">
               {NAV_LINKS.map((link) => (

@@ -2,8 +2,24 @@
 
 import Link from "next/link"
 import styles from "./hero.module.css"
+import { useAccount } from "wagmi"
+import { useChainModal, useConnectModal } from "@rainbow-me/rainbowkit"
 
 const Hero: React.FC = () => {
+  const { address, isConnected } = useAccount()
+  const { openConnectModal } = useConnectModal()
+  const { openChainModal } = useChainModal()
+
+  const handleWalletClick = () => {
+    if (!isConnected) {
+      openConnectModal?.()
+      return
+    }
+    openChainModal?.()
+  }
+
+  const walletLabel = isConnected && address ? `${address.slice(0, 6)}…${address.slice(-4)}` : "Connect Wallet"
+
   return (
     <section className={styles.hero} id="home">
       <div className={styles.glow} aria-hidden="true" />
@@ -24,6 +40,10 @@ const Hero: React.FC = () => {
             <Link className={styles.secondaryAction} href="/view">
               Explore records
             </Link>
+            <button type="button" onClick={handleWalletClick} className={`${styles.walletAction} ${isConnected ? styles.walletActionConnected : ""}`}>
+              <i className="fa-solid fa-wallet" aria-hidden="true" />
+              {walletLabel}
+            </button>
           </div>
           <ul className={styles.benefits}>
             <li>
