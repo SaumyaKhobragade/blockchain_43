@@ -4,6 +4,7 @@ import Link from "next/link"
 import { ReportCardDisplay } from "@/components/ReportCardDisplay"
 import { ReportCard } from "@/types/reportCard"
 import styles from "./view.module.css"
+import { useMemo } from "react"
 
 export default function ViewReportCards() {
   const [reportCards, setReportCards] = useState<ReportCard[]>([])
@@ -33,6 +34,95 @@ export default function ViewReportCards() {
   })
 
   const classes = Array.from(new Set(reportCards.map((card) => card.class)))
+
+  const gradeCounts = useMemo(() => {
+    const counts: Record<string, number> = { A: 0, B: 0, C: 0, D: 0, F: 0, Unknown: 0 }
+    for (const c of reportCards) {
+      const g = (c.overallGrade || "").toUpperCase()
+      if (g && counts[g] !== undefined) counts[g]++
+      else if (g && /^[A-D]$/.test(g)) counts[g] = (counts[g] || 0) + 1
+      else if (g === "F") counts.F++
+      else counts.Unknown++
+    }
+    return counts
+  }, [reportCards])
+
+  function PieChart({ counts, size = 180 }: { counts: Record<string, number>; size?: number }) {
+    const total = Object.values(counts).reduce((s, v) => s + v, 0) || 1
+    const colors: Record<string, string> = { A: "#4caf50", B: "#8bc34a", C: "#ffc107", D: "#ff9800", F: "#f44336", Unknown: "#9e9e9e" }
+
+    let cumulative = 0
+    const slices = Object.keys(counts).filter((k) => counts[k] > 0).map((k) => {
+      const value = counts[k]
+      const start = (cumulative / total) * 2 * Math.PI
+      cumulative += value
+      const end = (cumulative / total) * 2 * Math.PI
+      const large = end - start > Math.PI ? 1 : 0
+      // polar to cartesian
+      const r = size / 2
+      const sx = r + r * Math.cos(start - Math.PI / 2)
+      const sy = r + r * Math.sin(start - Math.PI / 2)
+      const ex = r + r * Math.cos(end - Math.PI / 2)
+      const ey = r + r * Math.sin(end - Math.PI / 2)
+      const d = `M ${r} ${r} L ${sx} ${sy} A ${r} ${r} 0 ${large} 1 ${ex} ${ey} Z`
+      return { key: k, value, d, color: colors[k] || "#666" }
+    })
+
+    return (
+      <div style={{ display: "flex", gap: 16, alignItems: "center", marginBottom: 16 }}>
+        <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`} aria-hidden>
+          {slices.map((s) => (
+            <path key={s.key} d={s.d} fill={s.color} stroke="#fff" strokeWidth={1} />
+          ))}
+        </svg>
+
+        <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+          {Object.keys(counts).map((k) => (
+            <div key={k} style={{ display: "flex", gap: 8, alignItems: "center", opacity: counts[k] ? 1 : 0.5 }}>
+              <span style={{ width: 12, height: 12, background: colors[k] || "#666", display: "inline-block", borderRadius: 3 }} />
+              <strong style={{ minWidth: 24 }}>{k}</strong>
+              <span> {counts[k]} </span>
+              <span style={{ color: "#666", fontSize: 12 }}>({((counts[k] / total) * 100).toFixed(1)}%)</span>
+            </div>
+          ))}
+        </div>
+      </div>
+    )
+  }
+
+  const seedSampleData = (className = '10th', count = 50) => {
+    const samples: ReportCard[] = []
+    for (let i = 0; i < count; i++) {
+      const subjects = [
+        { name: 'Mathematics', marks: Math.floor(45 + Math.random() * 55), maxMarks: 100, grade: 'F' },
+        { name: 'Science', marks: Math.floor(45 + Math.random() * 55), maxMarks: 100, grade: 'F' },
+        { name: 'English', marks: Math.floor(45 + Math.random() * 55), maxMarks: 100, grade: 'F' },
+      ]
+      const totalMarks = subjects.reduce((s, x) => s + x.marks, 0)
+      const maxTotalMarks = subjects.reduce((s, x) => s + x.maxMarks, 0)
+      const percentage = Math.round((totalMarks / maxTotalMarks) * 10000) / 100
+      const rc: ReportCard = {
+        id: `RC-sample-${Date.now()}-${i}`,
+        studentName: `Sample Student ${i + 1}`,
+        studentId: `S-${1000 + i}`,
+        class: className,
+        section: 'A',
+        academicYear: '2024-2025',
+        term: 'Annual',
+        subjects,
+        totalMarks,
+        maxTotalMarks,
+        percentage,
+        overallGrade: '',
+        remarks: 'Auto-generated sample',
+        teacherName: 'Auto',
+        dateIssued: new Date().toISOString(),
+      }
+      samples.push(rc)
+    }
+    localStorage.setItem('reportCards', JSON.stringify(samples))
+    setReportCards(samples)
+  }
 
   return (
     <div className={styles.container}>
@@ -79,6 +169,10 @@ export default function ViewReportCards() {
           </div>
 
           {/* Report Cards Grid */}
+          {/* Grade distribution pie chart */}
+          <div style={{ display: 'flex', justifyContent: 'center' }}>
+            <PieChart counts={gradeCounts} size={160} />
+          </div>
           {filteredCards.length === 0 ? (
             <div className={styles.emptyState}>
               <div className={styles.emptyIcon}>📚</div>
@@ -88,10 +182,16 @@ export default function ViewReportCards() {
                   ? "Start by creating your first report card"
                   : "No report cards match your search criteria"}
               </p>
-              <Link href="/create" className={styles.emptyBtn}>
-                <i className="fa-solid fa-plus"></i>
-                Create Report Card
-              </Link>
+              <div style={{ display: 'flex', gap: 12, justifyContent: 'center', marginTop: '1rem' }}>
+                <Link href="/create" className={styles.emptyBtn}>
+                  <i className="fa-solid fa-plus"></i>
+                  Create Report Card
+                </Link>
+                <button onClick={() => seedSampleData('10th', 50)} className={styles.emptyBtn}>
+                  <i className="fa-solid fa-database"></i>
+                  Generate Sample Data
+                </button>
+              </div>
             </div>
           ) : (
             <div className={styles.cardsGrid}>
