@@ -1,5 +1,5 @@
 "use client"
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useCallback } from 'react'
 import { ReportCard } from '@/types/reportCard'
 import { ClassAnalysis, calculateStats, gradeBuckets, distributionRanges } from '@/types/analysis'
 import AnalysisSummary from '@/components/AnalysisSummary'
@@ -9,6 +9,28 @@ import { useAccount, useChainId } from 'wagmi'
 import { useEthersSigner } from '@/hooks/useEthers'
 import { ethers } from 'ethers'
 import { CONTRACT_ADDRESS, CONTRACT_ABI } from '@/lib/contract'
+
+// Real student names pool for realistic sample data
+const FIRST_NAMES = [
+  "Emma", "Liam", "Olivia", "Noah", "Ava", "Ethan", "Sophia", "Mason", "Isabella", "William",
+  "Mia", "James", "Charlotte", "Benjamin", "Amelia", "Lucas", "Harper", "Henry", "Evelyn", "Alexander",
+  "Abigail", "Michael", "Emily", "Daniel", "Elizabeth", "Matthew", "Sofia", "Jackson", "Avery", "Sebastian",
+  "Ella", "David", "Scarlett", "Joseph", "Grace", "Carter", "Chloe", "Owen", "Victoria", "Wyatt",
+  "Riley", "John", "Aria", "Jack", "Lily", "Luke", "Aubrey", "Jayden", "Zoey", "Dylan",
+  "Penelope", "Grayson", "Layla", "Levi", "Nora", "Isaac", "Hannah", "Gabriel", "Lillian", "Julian",
+  "Addison", "Mateo", "Eleanor", "Anthony", "Natalie", "Jaxon", "Luna", "Lincoln", "Savannah", "Joshua",
+  "Brooklyn", "Christopher", "Leah", "Andrew", "Zoe", "Theodore", "Stella", "Caleb", "Hazel", "Ryan",
+  "Ellie", "Asher", "Paisley", "Nathan", "Audrey", "Thomas", "Skylar", "Leo", "Violet", "Isaiah",
+  "Claire", "Charles", "Bella", "Josiah", "Aurora", "Hudson", "Lucy", "Christian", "Anna", "Hunter"
+]
+
+const LAST_NAMES = [
+  "Smith", "Johnson", "Williams", "Brown", "Jones", "Garcia", "Miller", "Davis", "Rodriguez", "Martinez",
+  "Hernandez", "Lopez", "Gonzalez", "Wilson", "Anderson", "Thomas", "Taylor", "Moore", "Jackson", "Martin",
+  "Lee", "Perez", "Thompson", "White", "Harris", "Sanchez", "Clark", "Ramirez", "Lewis", "Robinson",
+  "Walker", "Young", "Allen", "King", "Wright", "Scott", "Torres", "Nguyen", "Hill", "Flores",
+  "Green", "Adams", "Nelson", "Baker", "Hall", "Rivera", "Campbell", "Mitchell", "Carter", "Roberts"
+]
 
 export default function AnalyticsPage() {
   const [reportCards, setReportCards] = useState<ReportCard[]>([])
@@ -22,16 +44,65 @@ export default function AnalyticsPage() {
   const { isConnected } = useAccount()
   const signer = useEthersSigner()
 
+  const seedSampleData = useCallback((className = "10th", count = 100) => {
+    const samples: ReportCard[] = []
+    for (let i = 0; i < count; i++) {
+      const firstName = FIRST_NAMES[Math.floor(Math.random() * FIRST_NAMES.length)]
+      const lastName = LAST_NAMES[Math.floor(Math.random() * LAST_NAMES.length)]
+      const subjects = [
+        { name: "Mathematics", marks: Math.floor(45 + Math.random() * 55), maxMarks: 100, grade: "F" },
+        { name: "Science", marks: Math.floor(45 + Math.random() * 55), maxMarks: 100, grade: "F" },
+        { name: "English", marks: Math.floor(45 + Math.random() * 55), maxMarks: 100, grade: "F" },
+      ]
+      const totalMarks = subjects.reduce((s, x) => s + x.marks, 0)
+      const maxTotalMarks = subjects.reduce((s, x) => s + x.maxMarks, 0)
+      const percentage = Math.round((totalMarks / maxTotalMarks) * 10000) / 100
+      samples.push({
+        id: `RC-sample-${Date.now()}-${i}`,
+        studentName: `${firstName} ${lastName}`,
+        studentId: `S-${1000 + i}`,
+        class: className,
+        section: "A",
+        academicYear: "2024-2025",
+        term: "Annual",
+        subjects,
+        totalMarks,
+        maxTotalMarks,
+        percentage,
+        overallGrade: "",
+        remarks: "Auto-generated sample",
+        teacherName: "Auto",
+        dateIssued: new Date().toISOString(),
+      })
+    }
+    localStorage.setItem("reportCards", JSON.stringify(samples))
+    setReportCards(samples)
+    setSelectedClass(className)
+  }, [])
+
   useEffect(() => {
     const stored = localStorage.getItem('reportCards')
     if (stored) {
       try {
-        setReportCards(JSON.parse(stored))
+        const cards = JSON.parse(stored)
+        if (Array.isArray(cards) && cards.length > 0) {
+          setReportCards(cards)
+          return
+        }
       } catch (e) { console.error(e) }
     }
-  }, [])
+    // Auto-seed with realistic names if no data exists
+    seedSampleData("10th", 100)
+  }, [seedSampleData])
 
   const classes = Array.from(new Set(reportCards.map(r => r.class))).sort()
+
+  // Auto-select first class when data loads
+  useEffect(() => {
+    if (!selectedClass && classes.length > 0) {
+      setSelectedClass(classes[0])
+    }
+  }, [classes, selectedClass])
 
   useEffect(() => {
     if (!selectedClass) return
@@ -54,41 +125,6 @@ export default function AnalyticsPage() {
     }
     setAnalysis(analysisObj)
   }, [selectedClass, reportCards])
-
-  const seedSampleData = (className = '10th', count = 10) => {
-    const samples: ReportCard[] = []
-    for (let i = 0; i < count; i++) {
-      const subjects = [
-        { name: 'Mathematics', marks: Math.floor(50 + Math.random() * 50), maxMarks: 100, grade: 'F' },
-        { name: 'Science', marks: Math.floor(50 + Math.random() * 50), maxMarks: 100, grade: 'F' },
-        { name: 'English', marks: Math.floor(50 + Math.random() * 50), maxMarks: 100, grade: 'F' },
-      ]
-      const totalMarks = subjects.reduce((s, x) => s + x.marks, 0)
-      const maxTotalMarks = subjects.reduce((s, x) => s + x.maxMarks, 0)
-      const percentage = Math.round((totalMarks / maxTotalMarks) * 10000) / 100
-      const rc: ReportCard = {
-        id: `RC-sample-${Date.now()}-${i}`,
-        studentName: `Sample Student ${i + 1}`,
-        studentId: `S-${1000 + i}`,
-        class: className,
-        section: 'A',
-        academicYear: '2024-2025',
-        term: 'Annual',
-        subjects,
-        totalMarks,
-        maxTotalMarks,
-        percentage,
-        overallGrade: '',
-        remarks: 'Auto-generated sample',
-        teacherName: 'Auto',
-        dateIssued: new Date().toISOString(),
-      }
-      samples.push(rc)
-    }
-    localStorage.setItem('reportCards', JSON.stringify(samples))
-    setReportCards(samples)
-    setSelectedClass(className)
-  }
 
   const handleUploadAnalysis = async () => {
     if (!analysis) return
@@ -176,7 +212,6 @@ export default function AnalyticsPage() {
             <option value="">Select Class</option>
             {classes.map(c => <option key={c} value={c}>{c}</option>)}
           </select>
-          <button onClick={() => seedSampleData('10th', 12)} className={styles.uploadBtn}>Generate Sample Data</button>
           <button onClick={handleUploadAnalysis} disabled={!analysis || isUploading} className={styles.uploadBtn}>{isUploading ? `Uploading ${Math.round(uploadProgress)}%` : 'Upload Analysis'}</button>
         </div>
       </div>

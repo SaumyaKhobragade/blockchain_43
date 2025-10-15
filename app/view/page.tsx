@@ -5,6 +5,28 @@ import { ReportCardDisplay } from "@/components/ReportCardDisplay"
 import { ReportCard } from "@/types/reportCard"
 import styles from "./view.module.css"
 
+// Real student names pool for realistic sample data
+const FIRST_NAMES = [
+  "Emma", "Liam", "Olivia", "Noah", "Ava", "Ethan", "Sophia", "Mason", "Isabella", "William",
+  "Mia", "James", "Charlotte", "Benjamin", "Amelia", "Lucas", "Harper", "Henry", "Evelyn", "Alexander",
+  "Abigail", "Michael", "Emily", "Daniel", "Elizabeth", "Matthew", "Sofia", "Jackson", "Avery", "Sebastian",
+  "Ella", "David", "Scarlett", "Joseph", "Grace", "Carter", "Chloe", "Owen", "Victoria", "Wyatt",
+  "Riley", "John", "Aria", "Jack", "Lily", "Luke", "Aubrey", "Jayden", "Zoey", "Dylan",
+  "Penelope", "Grayson", "Layla", "Levi", "Nora", "Isaac", "Hannah", "Gabriel", "Lillian", "Julian",
+  "Addison", "Mateo", "Eleanor", "Anthony", "Natalie", "Jaxon", "Luna", "Lincoln", "Savannah", "Joshua",
+  "Brooklyn", "Christopher", "Leah", "Andrew", "Zoe", "Theodore", "Stella", "Caleb", "Hazel", "Ryan",
+  "Ellie", "Asher", "Paisley", "Nathan", "Audrey", "Thomas", "Skylar", "Leo", "Violet", "Isaiah",
+  "Claire", "Charles", "Bella", "Josiah", "Aurora", "Hudson", "Lucy", "Christian", "Anna", "Hunter"
+]
+
+const LAST_NAMES = [
+  "Smith", "Johnson", "Williams", "Brown", "Jones", "Garcia", "Miller", "Davis", "Rodriguez", "Martinez",
+  "Hernandez", "Lopez", "Gonzalez", "Wilson", "Anderson", "Thomas", "Taylor", "Moore", "Jackson", "Martin",
+  "Lee", "Perez", "Thompson", "White", "Harris", "Sanchez", "Clark", "Ramirez", "Lewis", "Robinson",
+  "Walker", "Young", "Allen", "King", "Wright", "Scott", "Torres", "Nguyen", "Hill", "Flores",
+  "Green", "Adams", "Nelson", "Baker", "Hall", "Rivera", "Campbell", "Mitchell", "Carter", "Roberts"
+]
+
 export default function ViewReportCards() {
   const [reportCards, setReportCards] = useState<ReportCard[]>([])
   const [selectedCard, setSelectedCard] = useState<ReportCard | null>(null)
@@ -14,6 +36,8 @@ export default function ViewReportCards() {
   const seedSampleData = useCallback((className = "10th", count = 100) => {
     const samples: ReportCard[] = []
     for (let i = 0; i < count; i++) {
+      const firstName = FIRST_NAMES[Math.floor(Math.random() * FIRST_NAMES.length)]
+      const lastName = LAST_NAMES[Math.floor(Math.random() * LAST_NAMES.length)]
       const subjects = [
         { name: "Mathematics", marks: Math.floor(45 + Math.random() * 55), maxMarks: 100, grade: "F" },
         { name: "Science", marks: Math.floor(45 + Math.random() * 55), maxMarks: 100, grade: "F" },
@@ -24,7 +48,7 @@ export default function ViewReportCards() {
       const percentage = Math.round((totalMarks / maxTotalMarks) * 10000) / 100
       samples.push({
         id: `RC-sample-${Date.now()}-${i}`,
-        studentName: `Sample Student ${i + 1}`,
+        studentName: `${firstName} ${lastName}`,
         studentId: `S-${1000 + i}`,
         class: className,
         section: "A",
