@@ -1,58 +1,101 @@
 "use client"
-import Image from "next/image"
+
 import Link from "next/link"
-import React from "react"
 import styles from "./hero.module.css"
 
 const Hero: React.FC = () => {
   return (
     <section className={styles.hero} id="home">
-      <div className={`${styles['hero-body']} margin-center`}>
-        <div className={styles['hero-desc']}>
-          <div className={styles['hero-intro']}>
-            <p>Welcome to <span className={styles['hero_intro_wave']}>📚</span></p>
-            <h1>
-              <span className={`${styles['hero_intro_name']} gradient-txt`}>
-                IntelliX
-              </span>
-            </h1>
-            <p>
-              Create, Store & Share&nbsp;
-              <span id="typewriter">Academic Records on FileCoin</span>
-            </p>
-            <Link className="btn primary sparkle mt-6 inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-full hover:scale-105 transition-transform" href="/create">
-              Create Report Card
-              <i className="fa-solid fa-arrow-right"></i>
+      <div className={styles.glow} aria-hidden="true" />
+      <div className={styles.inner}>
+        <div className={styles.copy}>
+          <span className={styles.tag}>Decentralized academic vault</span>
+          <h1 className={styles.title}>
+            Own every milestone your learners achieve.
+          </h1>
+          <p className={styles.lead}>
+            IntelliX turns traditional report cards into portable, verifiable credentials anchored on Filecoin. Draft once, sign with a wallet, and share trusted records anywhere in the world.
+          </p>
+          <div className={styles.actions}>
+            <Link className={styles.primaryAction} href="/create">
+              Start creating
+              <i className="fa-solid fa-arrow-right" aria-hidden="true" />
+            </Link>
+            <Link className={styles.secondaryAction} href="/view">
+              Explore records
             </Link>
           </div>
-          <ul className={styles['hero-socials']}>
+          <ul className={styles.benefits}>
             <li>
-              <Link className={styles['hero-socials_link']} href="/create">
-                <i className="fa-solid fa-plus"></i>
-                <span>Create New</span>
-              </Link>
+              <i className="fa-solid fa-circle-check" aria-hidden="true" />
+              Wallet-aware workflows keep submissions compliant and auditable.
             </li>
             <li>
-              <Link className={styles['hero-socials_link']} href="/view">
-                <i className="fa-solid fa-list"></i>
-                <span>View All</span>
-              </Link>
+              <i className="fa-solid fa-circle-check" aria-hidden="true" />
+              Attach media, notes, and credentials while preserving student privacy.
             </li>
             <li>
-              <Link className={styles['hero-socials_link']} href="/store">
-                <i className="fa-solid fa-database"></i>
-                <span>FileCoin Storage</span>
-              </Link>
+              <i className="fa-solid fa-circle-check" aria-hidden="true" />
+              Export polished PDFs or share one-click verification links powered by IPFS.
             </li>
           </ul>
         </div>
-        <div className={styles['hero-pfp']}>
-          <Image 
-            src="/assets/logos/logo.svg" 
-            alt="Report Card Generator Logo" 
-            width={380} 
-            height={380} 
-          />
+
+        <div className={styles.showcase}>
+          <div className={styles.card}>
+            <header className={styles.cardHeader}>
+              <div className={styles.cardStatus}>Verified</div>
+              <div>
+                <p className={styles.cardEyebrow}>Student</p>
+                <h3 className={styles.cardTitle}>Maya Chen</h3>
+              </div>
+            </header>
+
+            <div className={styles.metricGrid}>
+              <div className={styles.metric}>
+                <span className={styles.metricLabel}>Overall grade</span>
+                <span className={styles.metricValue}>A+</span>
+              </div>
+              <div className={styles.metric}>
+                <span className={styles.metricLabel}>Attendance</span>
+                <span className={styles.metricValue}>98%</span>
+              </div>
+              <div className={styles.metric}>
+                <span className={styles.metricLabel}>STEM index</span>
+                <span className={styles.metricValue}>94</span>
+              </div>
+              <div className={styles.metric}>
+                <span className={styles.metricLabel}>Last update</span>
+                <span className={styles.metricValue}>Apr 02</span>
+              </div>
+            </div>
+
+            <div className={styles.cid}>
+              <span className={styles.cidLabel}>CID</span>
+              <code className={styles.cidValue}>bafybeibp5m2m4n4kz7p4ki332u7vlz4u5h7g6zqyx3rt2t6v54xpq3n5ae</code>
+            </div>
+
+            <div className={styles.badgeList}>
+              <span>STEM Excellence</span>
+              <span>Community Builder</span>
+              <span>Scholarship Ready</span>
+            </div>
+          </div>
+
+          <div className={styles.statStrip}>
+            <div>
+              <strong>4.2k</strong>
+              <span>records notarized</span>
+            </div>
+            <div>
+              <strong>62</strong>
+              <span>institutions onboarded</span>
+            </div>
+            <div>
+              <strong>12s</strong>
+              <span>average verification</span>
+            </div>
+          </div>
         </div>
       </div>
     </section>
