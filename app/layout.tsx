@@ -4,6 +4,7 @@ import { Funnel_Display, Funnel_Sans } from "next/font/google";
 import "./globals.css";
 import { ContextProvider } from ".";
 import ReactQueryProvider from "./ReactQueryProvider";
+import Header from "@/components/header";
 
 const geist = Geist({ subsets: ["latin"], variable: "--font-geist-sans" });
 const geistMono = Geist_Mono({
@@ -21,10 +22,10 @@ const funnelSans = Funnel_Sans({
   weight: ["300", "400", "500", "600", "700", "800"],
 });
 
-// Websit Config
+// Website Config
 export const metadata: Metadata = {
-  title: "FIL-B",
-  description: "Made with love by Team FIL-B",
+  title: "Report Card Generator | FileCoin Storage",
+  description: "Create, store, and manage academic report cards on the decentralized FileCoin network",
 };
 
 export default function RootLayout({
@@ -34,11 +35,27 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      <head>
+        <link
+          rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+          integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
+          crossOrigin="anonymous"
+          referrerPolicy="no-referrer"
+        />
+        <link
+          href="https://fonts.googleapis.com/css2?family=Lobster&display=swap"
+          rel="stylesheet"
+        />
+      </head>
       <body
         className={`${geist.variable} ${geistMono.variable} ${funnelDisplay.variable} ${funnelSans.variable} font-sans`}
       >
         <ReactQueryProvider>
-          <ContextProvider>{children}</ContextProvider>
+          <ContextProvider>
+            <Header />
+            {children}
+          </ContextProvider>
         </ReactQueryProvider>
       </body>
     </html>

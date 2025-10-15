@@ -1,0 +1,308 @@
+.reportCard {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  padding: 2rem;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 3px solid var(--txt-color, #732fda);
+  padding-bottom: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.headerContent {
+  display: flex;
+  gap: 1.5rem;
+  align-items: center;
+}
+
+.logo {
+  flex-shrink: 0;
+}
+
+.logoCircle {
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #732fda 0%, #e546dd 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+}
+
+.schoolInfo {
+  text-align: left;
+}
+
+.schoolName {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: #0b0326;
+  margin: 0;
+  font-family: "Lobster", sans-serif;
+}
+
+.schoolTagline {
+  font-size: 0.9rem;
+  color: #666;
+  margin: 0.25rem 0 0 0;
+}
+
+.badge {
+  flex-shrink: 0;
+}
+
+.badge span {
+  display: inline-block;
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #732fda 0%, #e546dd 100%);
+  color: white;
+  font-size: 1.5rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.studentInfo {
+  background: linear-gradient(135deg, rgba(115, 47, 218, 0.05) 0%, rgba(229, 70, 221, 0.05) 100%);
+  border-radius: 8px;
+  padding: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.infoGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1rem;
+}
+
+.infoItem {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.label {
+  font-size: 0.85rem;
+  color: #666;
+  font-weight: 500;
+}
+
+.value {
+  font-size: 1rem;
+  color: #0b0326;
+  font-weight: 600;
+}
+
+.tableContainer {
+  margin-bottom: 2rem;
+  overflow-x: auto;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.table thead {
+  background: linear-gradient(135deg, #732fda 0%, #4946e5 100%);
+  color: white;
+}
+
+.table th {
+  padding: 1rem;
+  text-align: left;
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
+.table tbody tr {
+  border-bottom: 1px solid #e5e7eb;
+  transition: background 0.2s;
+}
+
+.table tbody tr:hover {
+  background: rgba(115, 47, 218, 0.05);
+}
+
+.table td {
+  padding: 1rem;
+  color: #0b0326;
+}
+
+.subjectName {
+  font-weight: 600;
+  color: #732fda;
+}
+
+.gradeBadge {
+  display: inline-block;
+  padding: 0.25rem 0.75rem;
+  border-radius: 20px;
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.gradeAPlus {
+  background: #10b981;
+  color: white;
+}
+
+.gradeA {
+  background: #34d399;
+  color: white;
+}
+
+.gradeBPlus {
+  background: #60a5fa;
+  color: white;
+}
+
+.gradeB {
+  background: #93c5fd;
+  color: white;
+}
+
+.gradeC {
+  background: #fbbf24;
+  color: white;
+}
+
+.gradeD {
+  background: #fb923c;
+  color: white;
+}
+
+.gradeF {
+  background: #ef4444;
+  color: white;
+}
+
+.totalRow {
+  background: rgba(115, 47, 218, 0.1);
+  font-weight: 700;
+}
+
+.remarks {
+  background: #f9fafb;
+  border-left: 4px solid #732fda;
+  padding: 1.5rem;
+  margin-bottom: 2rem;
+  border-radius: 8px;
+}
+
+.remarks h3 {
+  font-size: 1.1rem;
+  margin: 0 0 0.75rem 0;
+  color: #0b0326;
+  font-weight: 600;
+}
+
+.remarks p {
+  margin: 0;
+  color: #4b5563;
+  line-height: 1.6;
+}
+
+.footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  padding-top: 2rem;
+  border-top: 2px solid #e5e7eb;
+  margin-top: 2rem;
+}
+
+.footerItem {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.signature {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  min-width: 200px;
+}
+
+.signatureName {
+  font-weight: 600;
+  color: #0b0326;
+}
+
+.signatureLine {
+  border-bottom: 2px solid #0b0326;
+  width: 100%;
+}
+
+.cidBadge {
+  margin-top: 1.5rem;
+  padding: 1rem;
+  background: linear-gradient(135deg, rgba(115, 47, 218, 0.1) 0%, rgba(229, 70, 221, 0.1) 100%);
+  border-radius: 8px;
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.cidLabel {
+  font-weight: 600;
+  color: #732fda;
+  font-size: 0.9rem;
+}
+
+.cidValue {
+  font-family: monospace;
+  font-size: 0.85rem;
+  background: white;
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  color: #0b0326;
+  word-break: break-all;
+  flex: 1;
+}
+
+.actions {
+  margin-top: 2rem;
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.downloadBtn {
+  background: linear-gradient(135deg, #732fda 0%, #e546dd 100%);
+  color: white;
+  border: none;
+  padding: 0.75rem 2rem;
+  border-radius: 9999px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: transform 0.2s, box-shadow 0.2s;
+  font-size: 1rem;
+}
+
+.downloadBtn:hover {
+  transform: scale(1.05);
+  box-shadow: 0 4px 12px rgba(115, 47, 218, 0.3);
+}
+
+@media print {
+  .actions {
+    display: none;
+  }
+}

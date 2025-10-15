@@ -1,0 +1,323 @@
+.container {
+  min-height: 100vh;
+  background: radial-gradient(circle at 99% 6%, rgba(115, 47, 218, 0.6), rgba(115, 47, 218, 0) 40%),
+    radial-gradient(circle at 27% 0%, rgba(73, 70, 229, 0.4), rgba(73, 70, 229, 0) 35%),
+    radial-gradient(circle at 8% 18%, rgba(229, 70, 221, 0.35), rgba(229, 70, 221, 0) 30%), #0b0326;
+  padding: 2rem 1rem;
+}
+
+.header {
+  max-width: 1400px;
+  margin: 0 auto 2rem;
+}
+
+.headerContent {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.backLink {
+  color: var(--txt-color, #e6e6f0);
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 600;
+  transition: transform 0.2s;
+}
+
+.backLink:hover {
+  transform: translateX(-4px);
+}
+
+.title {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--txt-color, #e6e6f0);
+  font-family: "Lobster", sans-serif;
+  margin: 0;
+  background: linear-gradient(135deg, #fff 0%, #e546dd 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.walletSection {
+  display: flex;
+  align-items: center;
+}
+
+.main {
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.formSection,
+.previewSection {
+  animation: fadeIn 0.3s ease-in;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.previewHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.previewHeader h2 {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: var(--txt-color, #e6e6f0);
+  margin: 0;
+}
+
+.editBtn {
+  background: rgba(255, 255, 255, 0.1);
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  color: var(--txt-color, #e6e6f0);
+  padding: 0.75rem 1.5rem;
+  border-radius: 9999px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: all 0.2s;
+}
+
+.editBtn:hover {
+  background: rgba(255, 255, 255, 0.2);
+  transform: scale(1.05);
+}
+
+.storageSection {
+  background: rgba(255, 255, 255, 0.05);
+  border: 2px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  padding: 2rem;
+  margin-top: 2rem;
+}
+
+.storageSection h3 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--txt-color, #e6e6f0);
+  margin: 0 0 1rem 0;
+}
+
+.storageDesc {
+  color: rgba(255, 255, 255, 0.8);
+  margin-bottom: 1.5rem;
+  line-height: 1.6;
+}
+
+.connectPrompt {
+  text-align: center;
+  padding: 2rem;
+}
+
+.connectPrompt p {
+  color: var(--txt-color, #e6e6f0);
+  margin-bottom: 1rem;
+  font-weight: 600;
+}
+
+.progress {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.progressBar {
+  width: 100%;
+  height: 12px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 9999px;
+  overflow: hidden;
+}
+
+.progressFill {
+  height: 100%;
+  background: linear-gradient(135deg, #732fda 0%, #e546dd 100%);
+  transition: width 0.3s;
+  border-radius: 9999px;
+}
+
+.progressText {
+  color: var(--txt-color, #e6e6f0);
+  font-weight: 600;
+  text-align: center;
+}
+
+.spinner {
+  width: 40px;
+  height: 40px;
+  border: 4px solid rgba(255, 255, 255, 0.1);
+  border-top-color: #e546dd;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin: 0 auto;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.error {
+  background: rgba(239, 68, 68, 0.1);
+  border: 2px solid #ef4444;
+  color: #fca5a5;
+  padding: 1rem;
+  border-radius: 8px;
+  margin-bottom: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.storeBtn {
+  background: linear-gradient(135deg, #732fda 0%, #e546dd 100%);
+  color: white;
+  border: none;
+  padding: 1rem 2rem;
+  border-radius: 9999px;
+  font-weight: 700;
+  font-size: 1.1rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin: 0 auto;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.storeBtn:hover:not(:disabled) {
+  transform: scale(1.05);
+  box-shadow: 0 4px 12px rgba(115, 47, 218, 0.4);
+}
+
+.storeBtn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.successSection {
+  background: linear-gradient(135deg, rgba(16, 185, 129, 0.1) 0%, rgba(16, 185, 129, 0.05) 100%);
+  border: 2px solid #10b981;
+  border-radius: 12px;
+  padding: 3rem 2rem;
+  margin-top: 2rem;
+  text-align: center;
+}
+
+.successIcon {
+  font-size: 4rem;
+  color: #10b981;
+  margin-bottom: 1rem;
+}
+
+.successSection h3 {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: var(--txt-color, #e6e6f0);
+  margin: 0 0 0.5rem 0;
+}
+
+.successSection p {
+  color: rgba(255, 255, 255, 0.8);
+  margin-bottom: 1.5rem;
+}
+
+.cidDisplay {
+  background: rgba(255, 255, 255, 0.05);
+  border: 2px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  padding: 1rem;
+  margin-bottom: 2rem;
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.cidLabel {
+  font-weight: 700;
+  color: var(--txt-color, #e6e6f0);
+}
+
+.cidValue {
+  font-family: monospace;
+  background: rgba(255, 255, 255, 0.1);
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  color: #10b981;
+  word-break: break-all;
+}
+
+.successActions {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.viewAllBtn,
+.createNewBtn {
+  padding: 0.75rem 2rem;
+  border-radius: 9999px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: transform 0.2s, box-shadow 0.2s;
+  text-decoration: none;
+}
+
+.viewAllBtn {
+  background: linear-gradient(135deg, #732fda 0%, #e546dd 100%);
+  color: white;
+  border: none;
+}
+
+.createNewBtn {
+  background: rgba(255, 255, 255, 0.1);
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  color: var(--txt-color, #e6e6f0);
+}
+
+.viewAllBtn:hover,
+.createNewBtn:hover {
+  transform: scale(1.05);
+}
+
+@media print {
+  .container {
+    background: white;
+  }
+  
+  .header,
+  .previewHeader,
+  .storageSection,
+  .successSection {
+    display: none;
+  }
+}

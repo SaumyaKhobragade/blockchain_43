@@ -1,0 +1,107 @@
+.hero {
+  background: radial-gradient(circle at 99% 6%, rgba(115, 47, 218, 0.6), rgba(115, 47, 218, 0) 40%),
+    radial-gradient(circle at 27% 0%, rgba(73, 70, 229, 0.4), rgba(73, 70, 229, 0) 35%),
+    radial-gradient(circle at 8% 18%, rgba(229, 70, 221, 0.35), rgba(229, 70, 221, 0) 30%), var(--bg-color1);
+}
+.hero-body {
+  min-height: 100vh;
+  padding: 80px 0;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  gap: 2rem 1rem;
+}
+.hero-desc {
+  flex-basis: 500px;
+  display: flex;
+  align-items: center;
+  position: relative;
+}
+.hero-intro {
+  padding: 4rem 0;
+}
+.hero-intro p {
+  font-size: 1.5rem;
+  color: var(--txt-color);
+}
+.hero_intro_wave {
+  display: inline-block;
+  animation: wave 1.5s linear 0.5s infinite;
+  transform-origin: 80% 80%;
+}
+.hero_intro_name {
+  font-family: "Lobster", sans-serif;
+  font-weight: 400;
+}
+#typewriter {
+  font-weight: 500;
+  color: cyan;
+  border-right: 3px solid var(--txt-color);
+  animation: blink 1.25s step-end infinite;
+}
+.hero-socials {
+  list-style-type: none;
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  display: flex;
+  gap: 0.5rem;
+}
+.hero-socials_link {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  text-decoration: none;
+  border-radius: var(--circle-border);
+  padding: 0.5rem 0.75rem;
+  text-align: center;
+  position: relative;
+  transition: all 0.3s ease-in-out;
+}
+.hero-socials_link i {
+  font-size: 1.25em;
+  color: var(--txt-muted-color);
+  transition: all 0.3s;
+}
+.hero-socials_link span {
+  font-weight: 500;
+  width: 0;
+  overflow: hidden;
+}
+.hero-socials_link:hover {
+  padding: 0.5rem 2rem;
+}
+.hero-socials_link:hover span {
+  width: fit-content;
+  margin-left: 0.5rem;
+}
+.hero-pfp {
+  flex-basis: 400px;
+  margin: auto 0;
+}
+.hero-pfp img {
+  width: min(380px, 100%);
+  height: min(380px, 100%);
+  margin: 0 auto;
+  display: block;
+  border-radius: 50%;
+  transition: all 0.5s;
+}
+.hero-pfp img:hover {
+  transform: scale(1.1);
+  box-shadow: 0px 4px 20px 0px rgba(255, 255, 255, 0.125);
+}
+@keyframes wave {
+  0% { transform: rotate(0deg); }
+  15% { transform: rotate(14deg); }
+  30% { transform: rotate(-8deg); }
+  40% { transform: rotate(14deg); }
+  50% { transform: rotate(-4deg); }
+  60% { transform: rotate(10deg); }
+  100% { transform: rotate(0deg); }
+}
+@keyframes blink {
+  from, to { border-color: transparent; }
+  50% { border-color: var(--txt-color); }
+}
