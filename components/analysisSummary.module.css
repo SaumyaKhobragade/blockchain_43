@@ -1,0 +1,24 @@
+.container { background: rgba(255,255,255,0.03); padding: 1.25rem; border-radius: 12px; border: 1px solid rgba(255,255,255,0.06); }
+.grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin-bottom: 1rem }
+.card { padding: 0.75rem; background: rgba(255,255,255,0.02); border-radius: 8px }
+.big { font-size: 1.5rem; font-weight: 700 }
+.section { margin-top: 1rem }
+.barRow { display:flex; align-items:center; gap:0.5rem; margin-bottom:0.5rem }
+.barLabel { width: 48px; text-align:right; color: #e6e6f0 }
+.barTrack { flex:1; background: rgba(255,255,255,0.06); height: 12px; border-radius: 999px; overflow:hidden }
+.barFill { height:100%; background: linear-gradient(90deg,#732fda,#e546dd) }
+.distRow { display:flex; align-items:center; gap:0.75rem; margin-bottom:0.5rem }
+.range { width: 80px; color: #e6e6f0 }
+.count { width: 32px; text-align:right }
+.distBar { flex:1; background: rgba(255,255,255,0.06); height: 10px; border-radius: 999px; overflow:hidden }
+.distFill { height:100%; background: linear-gradient(90deg,#10b981,#06b6d4) }
+
+.svg { display:block; margin-top: 0.5rem }
+.svgLabel { fill: #e6e6f0; font-size: 12px }
+.svgValue { fill: #e6e6f0; font-size: 12px }
+.svgTrack { fill: rgba(255,255,255,0.06) }
+.svgFill { fill: url(#grad) }
+.histFill { fill: linear-gradient(90deg,#10b981,#06b6d4) }
+.histLabel { fill: rgba(255,255,255,0.7); font-size: 11px }
+.histValue { fill: rgba(255,255,255,0.9); font-size: 11px }
+.meta { margin-top: 1rem; color: rgba(255,255,255,0.6) }

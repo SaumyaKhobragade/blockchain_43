@@ -1,0 +1,20 @@
+{
+  "className": "10th",
+  "studentCount": 5,
+  "meanPercentage": 78.4,
+  "medianPercentage": 80,
+  "stdDevPercentage": 6.32,
+  "minPercentage": 67,
+  "maxPercentage": 88,
+  "gradeCounts": { "A+": 0, "A": 2, "B+": 2, "B": 1, "C": 0, "D": 0, "F": 0 },
+  "marksDistribution": [
+    { "range": "0-39", "count": 0 },
+    { "range": "40-49", "count": 0 },
+    { "range": "50-59", "count": 0 },
+    { "range": "60-69", "count": 1 },
+    { "range": "70-79", "count": 2 },
+    { "range": "80-89", "count": 2 },
+    { "range": "90-100", "count": 0 }
+  ],
+  "createdAt": "2025-10-15T00:00:00.000Z"
+}

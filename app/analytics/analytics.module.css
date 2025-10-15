@@ -1,0 +1,8 @@
+.container { padding: 6rem 2rem 2rem; max-width: 1200px; margin: 0 auto }
+.header { display:flex; justify-content:space-between; align-items:center; gap:1rem; margin-bottom:1rem }
+.controls { display:flex; gap:0.5rem; align-items:center }
+.uploadBtn { background: linear-gradient(135deg,#732fda,#e546dd); color:white; padding:0.5rem 1rem; border-radius:8px; border:none }
+.content { margin-top:1rem }
+.empty { color: rgba(255,255,255,0.6); padding:2rem; text-align:center }
+.cidBox { margin-top:1rem; color: #10b981 }
+.error { margin-top:1rem; color: #f87171 }
