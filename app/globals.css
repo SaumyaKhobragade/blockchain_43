@@ -13,6 +13,8 @@
   --accent: #6366f1;
   --accent-soft: rgba(99, 102, 241, 0.16);
   --accent-strong: #8b5cf6;
+  --txt-color: var(--text-primary);
+  --txt-muted-color: var(--text-muted);
 }
 
 @media (prefers-color-scheme: dark) {
