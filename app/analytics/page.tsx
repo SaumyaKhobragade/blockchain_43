@@ -168,7 +168,11 @@ export default function AnalyticsPage() {
       <div className={styles.header}>
         <h1>Analytics</h1>
         <div className={styles.controls}>
-          <select value={selectedClass || ''} onChange={(e) => setSelectedClass(e.target.value || null)}>
+          <select
+            value={selectedClass || ''}
+            onChange={(e) => setSelectedClass(e.target.value || null)}
+            className={styles.classSelect}
+          >
             <option value="">Select Class</option>
             {classes.map(c => <option key={c} value={c}>{c}</option>)}
           </select>

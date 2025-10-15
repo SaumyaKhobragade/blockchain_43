@@ -1,10 +1,9 @@
 "use client"
-import { useState, useEffect } from "react"
+import { useState, useEffect, useMemo, useCallback } from "react"
 import Link from "next/link"
 import { ReportCardDisplay } from "@/components/ReportCardDisplay"
 import { ReportCard } from "@/types/reportCard"
 import styles from "./view.module.css"
-import { useMemo } from "react"
 
 export default function ViewReportCards() {
   const [reportCards, setReportCards] = useState<ReportCard[]>([])
@@ -12,18 +11,55 @@ export default function ViewReportCards() {
   const [searchTerm, setSearchTerm] = useState("")
   const [filterClass, setFilterClass] = useState("")
 
+  const seedSampleData = useCallback((className = "10th", count = 100) => {
+    const samples: ReportCard[] = []
+    for (let i = 0; i < count; i++) {
+      const subjects = [
+        { name: "Mathematics", marks: Math.floor(45 + Math.random() * 55), maxMarks: 100, grade: "F" },
+        { name: "Science", marks: Math.floor(45 + Math.random() * 55), maxMarks: 100, grade: "F" },
+        { name: "English", marks: Math.floor(45 + Math.random() * 55), maxMarks: 100, grade: "F" },
+      ]
+      const totalMarks = subjects.reduce((s, x) => s + x.marks, 0)
+      const maxTotalMarks = subjects.reduce((s, x) => s + x.maxMarks, 0)
+      const percentage = Math.round((totalMarks / maxTotalMarks) * 10000) / 100
+      samples.push({
+        id: `RC-sample-${Date.now()}-${i}`,
+        studentName: `Sample Student ${i + 1}`,
+        studentId: `S-${1000 + i}`,
+        class: className,
+        section: "A",
+        academicYear: "2024-2025",
+        term: "Annual",
+        subjects,
+        totalMarks,
+        maxTotalMarks,
+        percentage,
+        overallGrade: "",
+        remarks: "Auto-generated sample",
+        teacherName: "Auto",
+        dateIssued: new Date().toISOString(),
+      })
+    }
+    localStorage.setItem("reportCards", JSON.stringify(samples))
+    setReportCards(samples)
+  }, [])
+
   useEffect(() => {
-    // Load report cards from localStorage
+    // Load report cards from localStorage or seed sample data if empty
     const stored = localStorage.getItem("reportCards")
     if (stored) {
       try {
         const cards = JSON.parse(stored)
-        setReportCards(cards)
+        if (Array.isArray(cards) && cards.length > 0) {
+          setReportCards(cards)
+          return
+        }
       } catch (e) {
         console.error("Failed to load report cards:", e)
       }
     }
-  }, [])
+    seedSampleData("10th", 100)
+  }, [seedSampleData])
 
   const filteredCards = reportCards.filter((card) => {
     const matchesSearch =
@@ -36,20 +72,19 @@ export default function ViewReportCards() {
   const classes = Array.from(new Set(reportCards.map((card) => card.class)))
 
   const gradeCounts = useMemo(() => {
-    const counts: Record<string, number> = { A: 0, B: 0, C: 0, D: 0, F: 0, Unknown: 0 }
+    const counts: Record<string, number> = { A: 0, B: 0, C: 0, D: 0, F: 0 }
     for (const c of reportCards) {
       const g = (c.overallGrade || "").toUpperCase()
-      if (g && counts[g] !== undefined) counts[g]++
-      else if (g && /^[A-D]$/.test(g)) counts[g] = (counts[g] || 0) + 1
-      else if (g === "F") counts.F++
-      else counts.Unknown++
+      if (g in counts) {
+        counts[g] += 1
+      }
     }
     return counts
   }, [reportCards])
 
   function PieChart({ counts, size = 180 }: { counts: Record<string, number>; size?: number }) {
     const total = Object.values(counts).reduce((s, v) => s + v, 0) || 1
-    const colors: Record<string, string> = { A: "#4caf50", B: "#8bc34a", C: "#ffc107", D: "#ff9800", F: "#f44336", Unknown: "#9e9e9e" }
+    const colors: Record<string, string> = { A: "#4caf50", B: "#8bc34a", C: "#ffc107", D: "#ff9800", F: "#f44336" }
 
     let cumulative = 0
     const slices = Object.keys(counts).filter((k) => counts[k] > 0).map((k) => {
@@ -68,60 +103,25 @@ export default function ViewReportCards() {
       return { key: k, value, d, color: colors[k] || "#666" }
     })
 
+    if (slices.length === 0) {
+      return (
+        <div style={{ display: "flex", justifyContent: "center", marginBottom: 16 }}>
+          <div style={{ padding: "0.75rem 1.5rem", borderRadius: 9999, border: "1px dashed rgba(148,163,184,0.3)", color: "rgba(226,232,240,0.75)", fontSize: 14 }}>
+            No grade data available yet
+          </div>
+        </div>
+      )
+    }
+
     return (
-      <div style={{ display: "flex", gap: 16, alignItems: "center", marginBottom: 16 }}>
+      <div style={{ display: "flex", justifyContent: "center", marginBottom: 16 }}>
         <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`} aria-hidden>
           {slices.map((s) => (
-            <path key={s.key} d={s.d} fill={s.color} stroke="#fff" strokeWidth={1} />
+            <path key={s.key} d={s.d} fill={s.color} stroke="#0b0326" strokeWidth={1} />
           ))}
         </svg>
-
-        <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
-          {Object.keys(counts).map((k) => (
-            <div key={k} style={{ display: "flex", gap: 8, alignItems: "center", opacity: counts[k] ? 1 : 0.5 }}>
-              <span style={{ width: 12, height: 12, background: colors[k] || "#666", display: "inline-block", borderRadius: 3 }} />
-              <strong style={{ minWidth: 24 }}>{k}</strong>
-              <span> {counts[k]} </span>
-              <span style={{ color: "#666", fontSize: 12 }}>({((counts[k] / total) * 100).toFixed(1)}%)</span>
-            </div>
-          ))}
-        </div>
       </div>
     )
-  }
-
-  const seedSampleData = (className = '10th', count = 50) => {
-    const samples: ReportCard[] = []
-    for (let i = 0; i < count; i++) {
-      const subjects = [
-        { name: 'Mathematics', marks: Math.floor(45 + Math.random() * 55), maxMarks: 100, grade: 'F' },
-        { name: 'Science', marks: Math.floor(45 + Math.random() * 55), maxMarks: 100, grade: 'F' },
-        { name: 'English', marks: Math.floor(45 + Math.random() * 55), maxMarks: 100, grade: 'F' },
-      ]
-      const totalMarks = subjects.reduce((s, x) => s + x.marks, 0)
-      const maxTotalMarks = subjects.reduce((s, x) => s + x.maxMarks, 0)
-      const percentage = Math.round((totalMarks / maxTotalMarks) * 10000) / 100
-      const rc: ReportCard = {
-        id: `RC-sample-${Date.now()}-${i}`,
-        studentName: `Sample Student ${i + 1}`,
-        studentId: `S-${1000 + i}`,
-        class: className,
-        section: 'A',
-        academicYear: '2024-2025',
-        term: 'Annual',
-        subjects,
-        totalMarks,
-        maxTotalMarks,
-        percentage,
-        overallGrade: '',
-        remarks: 'Auto-generated sample',
-        teacherName: 'Auto',
-        dateIssued: new Date().toISOString(),
-      }
-      samples.push(rc)
-    }
-    localStorage.setItem('reportCards', JSON.stringify(samples))
-    setReportCards(samples)
   }
 
   return (
@@ -133,10 +133,16 @@ export default function ViewReportCards() {
             Back to Home
           </Link>
           <h1 className={styles.title}>All Report Cards</h1>
-          <Link href="/create" className={styles.createBtn}>
-            <i className="fa-solid fa-plus"></i>
-            Create New
-          </Link>
+          <div className={styles.actionGroup}>
+            <Link href="/create" className={styles.createBtn}>
+              <i className="fa-solid fa-plus"></i>
+              Create New
+            </Link>
+            <Link href="/analytics" className={styles.analyticsBtn}>
+              <i className="fa-solid fa-chart-line"></i>
+              View Analytics
+            </Link>
+          </div>
         </div>
       </div>
 
@@ -187,10 +193,10 @@ export default function ViewReportCards() {
                   <i className="fa-solid fa-plus"></i>
                   Create Report Card
                 </Link>
-                <button onClick={() => seedSampleData('10th', 50)} className={styles.emptyBtn}>
-                  <i className="fa-solid fa-database"></i>
-                  Generate Sample Data
-                </button>
+                <Link href="/analytics" className={styles.emptySecondaryBtn}>
+                  <i className="fa-solid fa-chart-line"></i>
+                  Go to Analytics
+                </Link>
               </div>
             </div>
           ) : (
