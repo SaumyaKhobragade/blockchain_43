@@ -11,16 +11,17 @@ const config: Config = {
   theme: {
     extend: {
       fontFamily: {
-        'funnel-display': ['var(--font-funnel-display)', 'system-ui', 'sans-serif'],
-        'funnel-sans': ['var(--font-funnel-sans)', 'system-ui', 'sans-serif'],
+        primary: ['var(--font-primary)', 'system-ui', 'sans-serif'],
+        'funnel-display': ['var(--font-primary)', 'system-ui', 'sans-serif'],
+        'funnel-sans': ['var(--font-primary)', 'system-ui', 'sans-serif'],
       },
       colors: {
-        primary: '#1e40af',         // e.g., Tailwind blue-800
-        secondary: '#9333ea',       // e.g., Tailwind purple-600
-        accent: '#f59e0b',          // e.g., Tailwind amber-500
-        muted: '#64748b',           // grayish-blue
-        'brand-dark': '#0f172a',    // dark background
-        'brand-light': '#f8fafc',   // light background
+        primary: '#6366f1',
+        secondary: '#22d3ee',
+        accent: '#f97316',
+        muted: '#94a3b8',
+        'brand-dark': '#020817',
+        'brand-light': '#f8fafc',
       },
       screens: {
         'sm': '640px',    // Default Tailwind 'sm'
